@@ -18,7 +18,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
-import tenacity
+from tenacity import retry, wait_random
 import chardet
 
 AIPROXY_TOKEN = os.environ["AIPROXY_TOKEN"]
@@ -81,6 +81,7 @@ def plot_correlation(correlation):
         print(f"Error plotting correlation matrix: {e}")
 
 # Function to interact with LLM
+@retry(wait = wait_random(min=1, max=9))
 def ask_llm(prompt):
     try:
         url = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions" 
@@ -96,10 +97,8 @@ def ask_llm(prompt):
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
         return response
-    except Exception as e:
-        print(f"Error interacting with LLM: {e}")
-        print(response.json())
-        return ''
+    finally:
+        print("error occured")
 
 # Main function to run analysis
 def Analyse(file_path):
