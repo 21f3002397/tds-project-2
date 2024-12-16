@@ -44,7 +44,7 @@ def summarize_dataset(data):
             "columns": list(data.columns),
             "dtypes": data.dtypes.to_dict(),
             "missing_values": data.isnull().sum().to_dict(),
-            "sample_data": data.head(10).to_dict(),
+            "sample_data": data.head(5).to_dict(),
         }
         return summary
     except Exception as e:
@@ -76,8 +76,8 @@ def plot_correlation(correlation):
 def ask_llm(prompt):
     try:
         url = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions"  # Replace with your intermediate server URL
-        headers = {"Content-Type": "application/json",
-                   "Authorization": f"Bearer {AIPROXY_TOKEN}"}
+        headers = {"Authorization": f"Bearer {AIPROXY_TOKEN}",
+               "Content-Type": "application/json"}
         data = {
             "model": "gpt-4o-mini",
             "messages":[
@@ -112,7 +112,9 @@ def Analyse(file_path):
         
         # Send summary to LLM
         llm_response = ask_llm(f"Given the following dataset summary: {summary}, what analysis would you recommend?")
-        print("LLM Recommendation:", llm_response)
+        with open(os.path.join(save_path,"README.md"),"wra") as f:
+            f.write(llm_response)
+
 
     if stats is not None:
         print("Numeric Data Stats:")
