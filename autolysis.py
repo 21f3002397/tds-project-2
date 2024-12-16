@@ -18,8 +18,14 @@ import seaborn as sns
 import requests
 
 AIPROXY_TOKEN = os.environ["AIPROXY_TOKEN"]
-file_name=sys.argv[1]
-print(file_name)
+file_name=os.path.splitext(sys.argv[1])[0]
+extension=os.path.splitext(sys.argv[1])[1]
+cwd=os.getcwd()
+save_path=os.path.join(cwd,file_name)
+print(save_path)
+if not os.path.exists(save_path):
+    os.makedirs(save_path)
+
 
 # Function to read the dataset
 def load_dataset(file_path):
@@ -62,7 +68,7 @@ def plot_correlation(correlation):
         plt.figure(figsize=(10, 8))
         sns.heatmap(correlation, annot=True, cmap="coolwarm")
         plt.title("Correlation Matrix")
-        plt.show()
+        plt.savefig(os.path.join(save_path,"fig_1.png"))
     except Exception as e:
         print(f"Error plotting correlation matrix: {e}")
 
@@ -118,4 +124,4 @@ def Analyse(file_path):
 
 if __name__ == "__main__":
     # Replace 'your_file.csv' with your actual file path
-    Analyse(file_name)
+    Analyse(sys.argv[1])
