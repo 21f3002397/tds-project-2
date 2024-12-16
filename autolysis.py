@@ -96,7 +96,7 @@ def ask_llm(prompt):
         }
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
-        return response
+        return response.json()["choices"][0]["message"]["content"]
     finally:
         print("error occured")
 
@@ -125,10 +125,7 @@ def Analyse(file_path):
         except:
             print(llm_response)
         with open(os.path.join(save_path,"README.md"),"w") as f:
-            if type(llm_response).__name__ == "str":
-                f.write(llm_response)
-            else:
-                f.write("There was an error summarising the data")
+            f.write(llm_response)
 
 
     if stats is not None:
