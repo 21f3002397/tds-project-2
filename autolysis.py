@@ -126,7 +126,7 @@ def Analyse(file_path):
         except:
             print(llm_response)
         with open(os.path.join(save_path,"README.md"),"w") as f:
-            if llm_response:
+            if type(llm_response).__name__ == "str":
                 f.write(llm_response)
             else:
                 f.write("There was an error summarising the data")
