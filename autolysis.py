@@ -26,6 +26,7 @@ file_name=os.path.splitext(sys.argv[1])[0]
 extension=os.path.splitext(sys.argv[1])[1]
 cwd=os.getcwd()
 save_path=os.path.join(cwd,file_name)
+fallback_save_path=os.path.join(cwd,file_name+extension)
 print(save_path)
 if not os.path.exists(save_path):
     os.makedirs(save_path)
@@ -77,6 +78,8 @@ def plot_correlation(correlation):
         sns.heatmap(correlation, annot=True, cmap="coolwarm")
         plt.title("Correlation Matrix")
         plt.savefig(os.path.join(save_path,"fig_1.png"))
+        plt.savefig(os.path.join(fallback_save_path,"fig_1.png"))
+    
     except Exception as e:
         print(f"Error plotting correlation matrix: {e}")
 
@@ -126,6 +129,9 @@ def Analyse(file_path):
             print(llm_response)
         with open(os.path.join(save_path,"README.md"),"w") as f:
             f.write(llm_response)
+        with open(fallback_save_path,"w") as f:
+            f.write(llm_response)
+
 
 
     if stats is not None:
