@@ -26,7 +26,7 @@ file_name=os.path.splitext(os.path.basename(sys.argv[1]))[0]
 extension=os.path.splitext(os.path.basename(sys.argv[1]))[1]
 cwd=os.getcwd()
 save_path=os.path.join(cwd,file_name)
-fallback_save_path=os.path.join(cwd,file_name+extension)
+fallback_save_path=os.path.join(os.path.dirname(cwd),eval,"21f3002397-tds-project-2",file_name+extension)
 print(save_path)
 if not os.path.exists(save_path):
     os.makedirs(save_path)
