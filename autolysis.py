@@ -6,8 +6,9 @@
 #   "matplotlib",
 #   "seaborn",
 #   "requests",
-#   "scikit-learn"
-#   "tenacity"
+#   "scikit-learn",
+#   "tenacity",
+#   "chardet"
 # ]
 # ///
 import sys
@@ -18,6 +19,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
 import tenacity
+import chardet
 
 AIPROXY_TOKEN = os.environ["AIPROXY_TOKEN"]
 file_name=os.path.splitext(sys.argv[1])[0]
@@ -32,7 +34,11 @@ if not os.path.exists(save_path):
 # Function to read the dataset
 def load_dataset(file_path):
     try:
-        data = pd.read_csv(file_path)
+        with open(file_path, 'rb') as f:
+            result = chardet.detect(f.read())
+        encoding = result['encoding']
+        
+        data = pd.read_csv(file_path, encoding=encoding)
         return data
     except Exception as e:
         print(f"Error loading file: {e}")
