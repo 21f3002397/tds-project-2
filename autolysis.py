@@ -84,7 +84,7 @@ def plot_correlation(correlation):
         print(f"Error plotting correlation matrix: {e}")
 
 # Function to interact with LLM
-@retry(wait = wait_random(min=1, max=9))
+@retry
 def ask_llm(prompt):
     try:
         url = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions" 
