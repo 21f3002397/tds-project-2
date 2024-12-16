@@ -30,6 +30,9 @@ fallback_save_path=os.path.join(cwd,file_name+extension)
 print(save_path)
 if not os.path.exists(save_path):
     os.makedirs(save_path)
+if not os.path.exists(fallback_save_path):
+    os.makedirs(fallback_save_path)
+
 
 
 # Function to read the dataset
