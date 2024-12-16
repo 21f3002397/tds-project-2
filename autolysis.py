@@ -7,6 +7,7 @@
 #   "seaborn",
 #   "requests",
 #   "scikit-learn"
+#   "tenacity"
 # ]
 # ///
 import sys
@@ -16,6 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
+import tenacity
 
 AIPROXY_TOKEN = os.environ["AIPROXY_TOKEN"]
 file_name=os.path.splitext(sys.argv[1])[0]
@@ -75,9 +77,9 @@ def plot_correlation(correlation):
 # Function to interact with LLM
 def ask_llm(prompt):
     try:
-        url = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions"  # Replace with your intermediate server URL
+        url = "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions" 
         headers = {"Authorization": f"Bearer {AIPROXY_TOKEN}",
-               "Content-Type": "application/json"}
+                   "Content-Type": "application/json"}
         data = {
             "model": "gpt-4o-mini",
             "messages":[
@@ -87,10 +89,11 @@ def ask_llm(prompt):
         }
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"]
+        return response
     except Exception as e:
         print(f"Error interacting with LLM: {e}")
-        return None
+        print(response.json())
+        return ''
 
 # Main function to run analysis
 def Analyse(file_path):
@@ -108,12 +111,16 @@ def Analyse(file_path):
         if correlation is not None:
             summary["correlation_matrix"] = correlation.to_dict()
 
-        print("Dataset Summary:", summary)
+        #print("Dataset Summary:", summary)
         
         # Send summary to LLM
         llm_response = ask_llm(f"Given the following dataset summary: {summary}, what analysis would you recommend?")
+        print(llm_response)
         with open(os.path.join(save_path,"README.md"),"w") as f:
-            f.write(llm_response)
+            if llm_response:
+                f.write(llm_response)
+            else:
+                f.write("There was an error summarising the data")
 
 
     if stats is not None:
