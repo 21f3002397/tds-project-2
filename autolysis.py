@@ -22,8 +22,8 @@ from tenacity import retry, wait_fixed
 import chardet
 
 AIPROXY_TOKEN = os.environ["AIPROXY_TOKEN"]
-file_name=os.path.splitext(sys.argv[1])[0]
-extension=os.path.splitext(sys.argv[1])[1]
+file_name=os.path.splitext(os.path.basename(sys.argv[1]))[0]
+extension=os.path.splitext(os.path.basename(sys.argv[1]))[1]
 cwd=os.getcwd()
 save_path=os.path.join(cwd,file_name)
 fallback_save_path=os.path.join(cwd,file_name+extension)
@@ -147,4 +147,4 @@ def Analyse(file_path):
 
 if __name__ == "__main__":
     # Replace 'your_file.csv' with your actual file path
-    Analyse(sys.argv[1])
+    Analyse(os.path.basename(sys.argv[1]))
