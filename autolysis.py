@@ -87,7 +87,7 @@ def ask_llm(prompt):
         }
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()
-        return response.json().get("choices", [{}])[0].get("text", "").strip()
+        return response.json()["choices"][0]["message"]["content"]
     except Exception as e:
         print(f"Error interacting with LLM: {e}")
         return None
