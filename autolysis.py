@@ -89,7 +89,7 @@ def ask_llm(prompt):
         data = {
             "model": "gpt-4o-mini",
             "messages":[
-                {"role": "system", "content": "You are a statistical summariser. Given the data you have to summarise it in a web article format, highlighting the important features of the data. Don't use bland info like 'this is an outlier, that is not, this is the mean, that is the median, etc.' Give useful metrics that says a story about the data. Use proper markdown for headings and such, and you are encouraged to use tables in markdown as well."},
+                {"role": "system", "content": "You are a statistical summariser. Given the data you have to summarise it in a web article format, highlighting the important features of the data. Don't use bland info like 'this is an outlier, that is not, this is the mean, that is the median, etc.' Give useful metrics that says a story about the data. Use proper markdown for headings and such, and you are encouraged to use tables in markdown as well. Limit your explanation to max 2000 words(excluding tables)"},
                 {"role": "user", "content": prompt}
             ]
         }
@@ -121,7 +121,10 @@ def Analyse(file_path):
         
         # Send summary to LLM
         llm_response = ask_llm(f"Given the following dataset summary: {summary}, what analysis would you recommend?")
-        print(llm_response)
+        try:
+            print(llm_response.json())
+        except:
+            print(llm_response)
         with open(os.path.join(save_path,"README.md"),"w") as f:
             if llm_response:
                 f.write(llm_response)
