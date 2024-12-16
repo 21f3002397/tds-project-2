@@ -112,7 +112,7 @@ def Analyse(file_path):
         
         # Send summary to LLM
         llm_response = ask_llm(f"Given the following dataset summary: {summary}, what analysis would you recommend?")
-        with open(os.path.join(save_path,"README.md"),"wra") as f:
+        with open(os.path.join(save_path,"README.md"),"w") as f:
             f.write(llm_response)
 
 
